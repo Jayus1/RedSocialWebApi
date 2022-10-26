@@ -11,17 +11,17 @@ namespace RedSocial.Data
 
     public class UsuarioData: IUsuarioData
     {
-        private readonly string DbConnectionString;
+        private readonly string connectionString;
 
 
         public UsuarioData(IConfiguration configuration)
         {
-            DbConnectionString = configuration.GetConnectionString("DefaultConnection");
+            connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         public async Task<bool> LoginUsuario(string username, string contraseña)
         {
-            using var con = new SqlConnection(DbConnectionString);
+            using var con = new SqlConnection(connectionString);
             var existe = await con.QueryFirstOrDefaultAsync<int>(
                 @"SELECT 1 
                   FROM Usuarios 

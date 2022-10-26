@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RedSocial.Data;
+using RedSocial.Modelos;
 
 namespace RedSocial.Controllers
 {
@@ -15,10 +16,10 @@ namespace RedSocial.Controllers
             this.usuarioData = usuarioData;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get(string username, string contraseña)
+        [HttpPost]
+        public async Task<IActionResult> Get([FromBody] Usuarios usuario)
         {
-            var cuentaExiste = await usuarioData.LoginUsuario(username, contraseña);
+            var cuentaExiste = await usuarioData.LoginUsuario(usuario.Username, usuario.Contraseña);
             if (cuentaExiste)
             {
                 return NotFound("Usuario no Encontrado");
