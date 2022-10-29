@@ -55,9 +55,9 @@ namespace RedSocial.Data
                 
             
             if(existe != 1)
-                return false;
+                return true;
 
-            return true;
+            return false;
 
         }
 
