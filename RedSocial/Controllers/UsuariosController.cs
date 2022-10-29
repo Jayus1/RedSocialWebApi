@@ -9,22 +9,41 @@ namespace RedSocial.Controllers
     [ApiController]
     public class UsuariosController : ControllerBase
     {
-        private readonly UsuarioData usuarioData;
+        private readonly IUsuarioData usuarioData;
 
-        public UsuariosController(UsuarioData usuarioData)
+        public UsuariosController(IUsuarioData usuarioData)
         {
             this.usuarioData = usuarioData;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Get([FromBody] Usuarios usuario)
+        [HttpPost("Login",Name = "LoginDeUsuarios")]
+        //[Route("Login")]
+        public async Task<IActionResult> Login([FromBody] Usuarios usuario)
         {
             var cuentaExiste = await usuarioData.LoginUsuario(usuario.Username, usuario.Contraseña);
-            if (cuentaExiste)
+            if (!cuentaExiste)
             {
                 return NotFound("Usuario no Encontrado");
             }
             return Ok("Bienvenido");
+        }
+
+        [HttpPost("Registro", Name = "CrearUsuarios")]
+        //[Route("Registro")]
+        public async Task<IActionResult> CreateUser([FromBody] Usuarios usuario)
+        {
+            var cuentaExiste = await usuarioData.ExistenciaUsuario(usuario.Username);
+            if (cuentaExiste)          
+                return Conflict("El usuario ya existe");
+            
+
+            var crear=await usuarioData.CreacionDeUsuario(usuario);
+
+            if (!crear)
+                return BadRequest("Hubo un conflicto con la creacion de su usuario");
+
+            return Ok("Usuario creado correctamente");
+
         }
 
     }
