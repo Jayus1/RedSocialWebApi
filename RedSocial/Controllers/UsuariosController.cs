@@ -22,9 +22,8 @@ namespace RedSocial.Controllers
         {
             var cuentaExiste = await usuarioData.LoginUsuario(usuario.Username, usuario.Contraseña);
             if (!cuentaExiste)
-            {
                 return NotFound("Usuario no Encontrado");
-            }
+
             return Ok("Bienvenido");
         }
 
