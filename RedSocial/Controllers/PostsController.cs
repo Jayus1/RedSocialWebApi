@@ -56,7 +56,7 @@ namespace RedSocial.Controllers
         {
             var edit = await postsData.EditarPost(idUsuario, idPost, post);
             if (!edit)
-                return BadRequest("No se pudo editar el post");
+                return NotFound("No se pudo editar o encontrar el post");
 
             return Ok("Se edito el post correctamente");
         }
