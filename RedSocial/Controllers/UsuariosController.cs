@@ -16,28 +16,32 @@ namespace RedSocial.Controllers
             this.usuarioData = usuarioData;
         }
 
-        [HttpPost(Name ="LoginDeUsuarios")]
+        [HttpPost("Login",Name = "LoginDeUsuarios")]
+        //[Route("Login")]
         public async Task<IActionResult> Login([FromBody] Usuarios usuario)
         {
             var cuentaExiste = await usuarioData.LoginUsuario(usuario.Username, usuario.Contraseña);
             if (!cuentaExiste)
-            {
                 return NotFound("Usuario no Encontrado");
-            }
+
             return Ok("Bienvenido");
         }
 
-        [HttpPost(Name ="CrearUsuarios")]
+        [HttpPost("Registro", Name = "CrearUsuarios")]
+        //[Route("Registro")]
         public async Task<IActionResult> CreateUser([FromBody] Usuarios usuario)
         {
-            var cuentaExiste = await usuarioData.LoginUsuario(usuario.Username, usuario.Contraseña);
-            if (!cuentaExiste)
-            {
-                return BadRequest("El usuario ya existe");
-            }
+            var cuentaExiste = await usuarioData.ExistenciaUsuario(usuario.Username);
+            if (!cuentaExiste)          
+                return Conflict("El usuario ya existe");
+            
 
-            await usuarioData.CreacioDeUsuario(usuario);
-            return Ok("Bienvenido");
+            var crear=await usuarioData.CreacionDeUsuario(usuario);
+
+            if (!crear)
+                return BadRequest("Hubo un conflicto con la creacion de su usuario");
+
+            return Ok("Usuario creado correctamente");
 
         }
 
