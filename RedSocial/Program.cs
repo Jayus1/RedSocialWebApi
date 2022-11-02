@@ -10,6 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IUsuarioData,UsuarioData>();
 builder.Services.AddTransient<IPostsData,PostsData>();
+builder.Services.AddTransient<IComentariosData,ComentariosData>();
 
 var app = builder.Build();
 

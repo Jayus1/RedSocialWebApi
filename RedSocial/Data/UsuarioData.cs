@@ -16,25 +16,27 @@ namespace RedSocial.Data
     {
         private readonly string connectionString;
 
-        public UsuarioData(IConfiguration configuration)
-        {
-            connectionString = configuration.GetConnectionString("DefaultConnection");
-        }
+        public UsuarioData(IConfiguration configuration) => connectionString = configuration.GetConnectionString("DefaultConnection");
 
         public async Task<bool> LoginUsuario(string username, string contraseña)
         {
             using var con = new SqlConnection(connectionString);
-            var existe = await con.QueryFirstOrDefaultAsync<int>(
+            var login = await con.QueryFirstOrDefaultAsync<int>(
                 @"SELECT 1 
                   FROM Usuarios 
                   WHERE Username = @username AND Contraseña = @contraseña;", 
                 new { username, contraseña });
-            return existe == 1;
+            return login == 1;
         }
 
         public async Task<bool> CreacionDeUsuario(Usuarios usuario)
         {
             using var con= new SqlConnection(connectionString);
+
+            var existe =await  ExistenciaUsuario(usuario.Username);
+            if(existe)
+                return false;
+            
             var crear = await con.ExecuteAsync("INSERT INTO Usuarios " +
                                                 "VALUES (@Username, @contraseña);",
                                                 usuario);
@@ -55,12 +57,10 @@ namespace RedSocial.Data
                 
             
             if(existe != 1)
-                return true;
+                return false;
 
-            return false;
+            return true;
 
         }
-
-
     }
 }

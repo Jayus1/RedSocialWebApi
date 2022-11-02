@@ -19,7 +19,7 @@ namespace RedSocial.Controllers
 
         [HttpGet("Ver/{id}")]
        public async Task<IActionResult> GetPosts(int id)
-        {
+        {       
             var posts = await postsData.VerPost(id);
 
             if(posts == null)
@@ -31,10 +31,15 @@ namespace RedSocial.Controllers
         [HttpGet("Ver/{idUsuario}/{idPost}")]
         public async Task<IActionResult> GetPost(int idUsuario, int idPost)
         {
+
+            var exist = await postsData.ExistePost(idPost);
+            if(!exist)
+                return NotFound("No se encontro este post");
+
             var posts = await postsData.VerPostPorId(idUsuario, idPost);
 
             if (posts == null)
-                return NotFound("No se encontro nada");
+                return BadRequest("Hubo un inconveniente con este post");
 
             return Ok(posts);
         }
@@ -54,9 +59,13 @@ namespace RedSocial.Controllers
         [HttpPut("Editar/{idUsuario}/{idPost}")]
         public async Task<IActionResult> EditPost (int idUsuario, int idPost, [FromBody] Posts post)
         {
+            var exist = await postsData.ExistePost(idPost);
+            if (!exist)
+                return NotFound("No se encontro este post");
+
             var edit = await postsData.EditarPost(idUsuario, idPost, post);
             if (!edit)
-                return NotFound("No se pudo editar o encontrar el post");
+                return NotFound("No se pudo editar");
 
             return Ok("Se edito el post correctamente");
         }
@@ -64,11 +73,16 @@ namespace RedSocial.Controllers
         [HttpDelete("Eliminar/{idUsuario}/{idPost}")]
         public async Task<IActionResult> DeletePost(int idUsuario, int idPost)
         {
+            var exist = await postsData.ExistePost(idPost);
+            if (!exist)
+                return NotFound("No se encontro este post");
+
             var delete = await postsData.EliminarPost(idUsuario, idPost);
             if (!delete)
                 return BadRequest("No se pudo eliminar el post");
 
             return Ok("Se elimino el post correctamente");
         }
+
     }
 }

@@ -9,6 +9,7 @@ namespace RedSocial.Data
         Task<bool> CrearPost(int id, Posts post);
         Task<bool> EditarPost(int idPost, int idUsuario, Posts post);
         Task<bool> EliminarPost(int idUsuario, int idPost);
+        Task<bool> ExistePost(int idPost);
         Task<IEnumerable<Posts>> VerPost(int id);
         Task<Posts> VerPostPorId(int idUsuario, int idPost);
     }
@@ -17,10 +18,7 @@ namespace RedSocial.Data
     {
         private readonly string connectionString;
 
-        public PostsData(IConfiguration configuration)
-        {
-            connectionString = configuration.GetConnectionString("DefaultConnection");
-        }
+        public PostsData(IConfiguration configuration) => connectionString = configuration.GetConnectionString("DefaultConnection");
 
         public async Task<IEnumerable<Posts>> VerPost(int id)
         {
@@ -74,6 +72,18 @@ namespace RedSocial.Data
                                                   new { idPost, idUsuario });
             if (delete != 1)
                 return false;
+            return true;
+        }
+
+        public async Task<bool> ExistePost(int idPost)
+        {
+            using var con = new SqlConnection(connectionString);
+            var existe = await con.ExecuteAsync(@"SELECT * FROM Posts
+                                                  WHERE Id = @idPost",
+                                                  idPost);
+            if (existe != 1)
+                return false;
+
             return true;
         }
     }
