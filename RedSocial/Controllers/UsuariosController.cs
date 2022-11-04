@@ -17,7 +17,6 @@ namespace RedSocial.Controllers
         }
 
         [HttpPost("Login",Name = "LoginDeUsuarios")]
-        //[Route("Login")]
         public async Task<IActionResult> Login([FromBody] Usuarios usuario)
         {
             var cuentaExiste = await usuarioData.LoginUsuario(usuario.Username, usuario.Contraseña);

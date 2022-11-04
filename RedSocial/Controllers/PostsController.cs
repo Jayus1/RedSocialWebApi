@@ -59,9 +59,13 @@ namespace RedSocial.Controllers
         [HttpPut("Editar/{idUsuario}/{idPost}")]
         public async Task<IActionResult> EditPost (int idUsuario, int idPost, [FromBody] Posts post)
         {
+            var exist = await postsData.ExistePost(idPost);
+            if (!exist)
+                return NotFound("No se encontro este post");
+
             var edit = await postsData.EditarPost(idUsuario, idPost, post);
             if (!edit)
-                return BadRequest("No se pudo editar el post");
+                return NotFound("No se pudo editar");
 
             return Ok("Se edito el post correctamente");
         }
@@ -69,6 +73,10 @@ namespace RedSocial.Controllers
         [HttpDelete("Eliminar/{idUsuario}/{idPost}")]
         public async Task<IActionResult> DeletePost(int idUsuario, int idPost)
         {
+            var exist = await postsData.ExistePost(idPost);
+            if (!exist)
+                return NotFound("No se encontro este post");
+
             var delete = await postsData.EliminarPost(idUsuario, idPost);
             if (!delete)
                 return BadRequest("No se pudo eliminar el post");
