@@ -56,14 +56,14 @@ namespace RedSocial.Controllers
             return Ok("Post creado exitosamente");
         }
 
-        [HttpPut("Editar/{idUsuario}/{idPost}")]
-        public async Task<IActionResult> EditPost (int idUsuario, int idPost, [FromBody] Posts post)
+        [HttpPut("Editar/{idUsuario}")]
+        public async Task<IActionResult> EditPost (int idUsuario, [FromBody] Posts post)
         {
-            var exist = await postsData.ExistePost(idPost);
+            var exist = await postsData.ExistePost(post.Id);
             if (!exist)
                 return NotFound("No se encontro este post");
 
-            var edit = await postsData.EditarPost(idUsuario, idPost, post);
+            var edit = await postsData.EditarPost(idUsuario, post);
             if (!edit)
                 return NotFound("No se pudo editar");
 

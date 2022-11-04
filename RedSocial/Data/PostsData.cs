@@ -7,7 +7,7 @@ namespace RedSocial.Data
     public interface IPostsData
     {
         Task<bool> CrearPost(int id, Posts post);
-        Task<bool> EditarPost(int idPost, int idUsuario, Posts post);
+        Task<bool> EditarPost(int idPost, Posts post);
         Task<bool> EliminarPost(int idUsuario, int idPost);
         Task<bool> ExistePost(int idPost);
         Task<IEnumerable<Posts>> VerPost(int id);
@@ -50,13 +50,13 @@ namespace RedSocial.Data
             return true;
         }
 
-        public async Task<bool> EditarPost(int idUsuario, int idPost, Posts post)
+        public async Task<bool> EditarPost(int idUsuario, Posts post)
         {
             using var conn = new SqlConnection(connectionString);
             var editar = await conn.ExecuteAsync(@"UPDATE Posts 
                                                    SET Titulo=@titulo, Contenido=@contenido 
                                                    WHERE Id=@idPost AND IdUsuario=@idUsuario", 
-                                                   new { post.Titulo,post.Contenido, idPost, idUsuario});
+                                                   new { post.Titulo,post.Contenido, post.Id, idUsuario});
 
             if (editar != 1)
                 return false;

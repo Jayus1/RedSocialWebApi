@@ -7,8 +7,8 @@ namespace RedSocial.Data
 {
     public interface IComentariosData
     {
-        Task<bool> CrearComentario(int idUsuario, int idPost, [FromBody] Comentarios comentarios);
-        Task<bool> EditarComentario(int idPost, int idUsuario, int idComentario, [FromBody] Comentarios comentarios);
+        Task<bool> CrearComentario(int idUsuario, Comentarios comentarios);
+        Task<bool> EditarComentario(int idPost, int idUsuario, int idComentario, string comentarios);
         Task<bool> EliminarComentario(int idPost, int idUsuario, int idComentario);
         Task<bool> ExisteComentario(int idUsuario, int idComentario);
         Task<Comentarios> VerCommentario(int idPost, int idUsuario);
@@ -31,24 +31,24 @@ namespace RedSocial.Data
             return comentario;
         }
 
-        public async Task<bool> CrearComentario(int idUsuario, int idPost, Comentarios comentarios)
+        public async Task<bool> CrearComentario(int idUsuario, Comentarios comentarios)
         {
             using var conn = new SqlConnection(connectionstring);
             var creacion = await conn.ExecuteAsync(@"INSERT INTO Comentarios 
                                                VALUES (@idPost, @idUsuario, @comentario)",
-                                               new { idPost, idUsuario, comentarios.Comentario });
-            if (creacion == null)
+                                               new { comentarios.IdPost, idUsuario, comentarios.Comentario});
+            if (creacion !=1)
                 return false;
             return true;
         }
 
-        public async Task<bool> EditarComentario(int idPost, int idUsuario, int idComentario, Comentarios comentarios)
+        public async Task<bool> EditarComentario(int idPost, int idUsuario, int idComentario, string comentarios)
         {
             using var conn = new SqlConnection(connectionstring);
             var editar = await conn.ExecuteAsync(@"UPDATE INTO Comentarios 
                                                    VALUEES Comentario= @comentarios
                                                    WHERE IdPost = @idPost AND IdUsuario= @idUsuario;",
-                                                   new { comentarios.Comentario, idPost, idUsuario });
+                                                   new { comentarios, idPost, idUsuario });
             if (editar != 1)
                 return false;
 

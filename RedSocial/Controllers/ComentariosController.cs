@@ -16,7 +16,7 @@ namespace RedSocial.Controllers
             this.comentariosData = comentariosData;
         }
 
-        [HttpGet("{idUsuario}/{idPost}")]
+        [HttpGet("CrearComentarios/{idUsuario}/{idPost}")]
         public async Task<IActionResult> GetComentarios(int idUsuario, int idPost)
         {
             
@@ -27,30 +27,30 @@ namespace RedSocial.Controllers
             return Ok(idPost);
         }
 
-        [HttpPost("{idUsuario}/{idPost}")]
-        public async Task<IActionResult> PostComments(int idUsuario, int idPost, [FromBody] Comentarios comentarios)
+        [HttpPost("Comentar/{idUsuario}")]
+        public async Task<IActionResult> PostComments(int idUsuario, [FromBody] Comentarios comentarios)
         {
 
-            var create = await comentariosData.CrearComentario(idUsuario, idPost, comentarios);
+            var create = await comentariosData.CrearComentario(idUsuario, comentarios);
             if (create == false)
                 return BadRequest("No se pudo crear el comentario");
             return Ok("El post fue creado exitosamente");
         }
 
-        [HttpPut("{idUsuario}/{idPost}/{idComentarios}")]
-        public async Task<IActionResult> PutComments(int idPost,int idUsuario ,int idComentarios, [FromBody] Comentarios comentarios)
+        [HttpPut("EditarComentario/{idUsuario}/{idComentarios}")]
+        public async Task<IActionResult> PutComments(int idUsuario ,int idComentarios,[FromBody] Comentarios comentarios)
         {
             var existe= await comentariosData.ExisteComentario(idUsuario,idComentarios);
             if (!existe)
                 return Conflict("El comentario no existe");
 
-            var editar = await comentariosData.EditarComentario(idPost, idUsuario, idComentarios, comentarios);
+            var editar = await comentariosData.EditarComentario(comentarios.IdPost, idUsuario, idComentarios, comentarios.Comentario);
             if (editar)
                 return BadRequest("Hubo problemas al tratar de editar el post");
             return Ok("Se edito el usuario correctamente");
         }
 
-        [HttpDelete("{idusuario}/{idPost}/{idComentario}")]
+        [HttpDelete("EliminarComentario/{idusuario}/{idPost}/{idComentario}")]
         public async Task<IActionResult> DeleteComments(int idPost,int idUsuario, int idComentario)
         {
             var existe = await comentariosData.ExisteComentario(idUsuario, idComentario);

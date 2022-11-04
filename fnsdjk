@@ -1,0 +1,74 @@
+[33mcommit 3191742760486169cd2bbcb671ae51cf1703640a[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Merge: c962ace 4ef8a60
+Author: Julio Sierra <juliosierra299@gmail.com>
+Date:   Tue Nov 1 22:40:57 2022 -0400
+
+    4-Comentarios
+
+[33mcommit c962acec23dd013b407bfd6dbd26548b54f123fa[m
+Author: Julio Sierra <juliosierra299@gmail.com>
+Date:   Tue Nov 1 19:35:33 2022 -0400
+
+    Ajustes
+
+[33mcommit 4ef8a6061aa0c22e3f4649200d4056f9f4b3e457[m
+Merge: 102c4ca 8e37b42
+Author: Julio Sierra <86539970+Jayus1@users.noreply.github.com>
+Date:   Tue Nov 1 15:50:32 2022 -0400
+
+    Ajustes de existencia de datos
+
+[33mcommit 102c4ca9554efe6233fa4824dff768ab9309df1f[m
+Author: Julio Sierra <86539970+Jayus1@users.noreply.github.com>
+Date:   Mon Oct 31 08:13:52 2022 -0400
+
+    Post: Final
+
+[33mcommit 8e37b421238d9cd0521a980cdef69b1a4b74fb43[m
+Author: Julio Sierra <juliosierra299@gmail.com>
+Date:   Sun Oct 30 00:33:26 2022 -0400
+
+    4-Post: Finalizado
+
+[33mcommit 3e482bb7104f5ce367fecdcec7b157e4b249cb57[m
+Author: Julio Sierra <juliosierra299@gmail.com>
+Date:   Fri Oct 28 23:36:50 2022 -0400
+
+    3-Post: Creacion de metodos de datos
+
+[33mcommit de5076e5c1f9c28bab84de8620398168ab5f7fbd[m
+Merge: 35a7c63 0b9acce
+Author: Julio Sierra <juliosierra299@gmail.com>
+Date:   Fri Oct 28 21:56:52 2022 -0400
+
+    2-Registro de Usuarios
+
+[33mcommit 35a7c63bff4dcdbe95e27f553c830bee447223df[m
+Author: Julio Sierra <juliosierra299@gmail.com>
+Date:   Fri Oct 28 20:03:27 2022 -0400
+
+    Login Fin
+
+[33mcommit 0b9acce82fb7472cfba69f8e94b310531baa3187[m
+Author: Julio Sierra <86539970+Jayus1@users.noreply.github.com>
+Date:   Fri Oct 28 14:53:20 2022 -0400
+
+    Login Fin
+
+[33mcommit a65470aa0dce7b0b0456c6fb6dfc7dbbbab62bc3[m
+Author: Julio Sierra <86539970+Jayus1@users.noreply.github.com>
+Date:   Wed Oct 26 15:51:14 2022 -0400
+
+    1-Login
+
+[33mcommit a4fa29fd4ec47443f8d676083d341bde63ebcc87[m
+Author: Julio Sierra <86539970+Jayus1@users.noreply.github.com>
+Date:   Wed Oct 26 08:14:31 2022 -0400
+
+    Inicio
+
+[33mcommit f74d6c572814e5066b064590726b3e635b5badbc[m
+Author: Julio Sierra <86539970+Jayus1@users.noreply.github.com>
+Date:   Tue Oct 25 15:47:26 2022 -0400
+
+    first commit
