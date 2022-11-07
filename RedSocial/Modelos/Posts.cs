@@ -5,7 +5,6 @@ namespace RedSocial.Modelos
 {
     public class Posts
     {
-        [NonSerialized]
         public int Id { get; set; }
         public string Titulo { get; set; }
         public string Contenido { get; set; }

@@ -9,7 +9,7 @@ namespace RedSocial.Data
         Task<bool> CrearReaccion(Posts posts);
         Task<bool> DeleteReaccion(int idUser, int idPost, int idReaccion);
         Task<bool> EditarReaccion(Posts posts);
-        Task<bool> ExisteReaccion(Posts posts;
+        Task<bool> ExisteReaccion(Posts posts);
         Task<bool> ExisteReaccion(int idUser, int idPost, int idReaccion);
         Task<IEnumerable<Reacciones>> VerReaccion(int idPost);
         Task<IEnumerable<Reacciones>> VerTiposReaccion();

@@ -26,12 +26,12 @@ namespace RedSocial.Controllers
             return Ok("Bienvenido");
         }
 
-        [HttpPost("Registro", Name = "CrearUsuarios")]
+        [HttpPost("Creacion", Name = "CrearUsuarios")]
         //[Route("Registro")]
         public async Task<IActionResult> CreateUser([FromBody] Usuarios usuario)
         {
             var cuentaExiste = await usuarioData.ExistenciaUsuario(usuario.Username);
-            if (!cuentaExiste)          
+            if (cuentaExiste)          
                 return Conflict("El usuario ya existe");
             
 

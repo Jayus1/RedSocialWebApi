@@ -69,7 +69,7 @@ namespace RedSocial.Controllers
         [HttpDelete("{idUser}/{idPost}/{idReaccion}")]
         public async Task<IActionResult> DeleteReaccion(int idUser, int idPost, int idReaccion)
         {
-            var exist = await reaccionesData.ExisteReaccion( );
+            var exist = await reaccionesData.ExisteReaccion(idUser, idPost, idReaccion);
             if (exist)
                 return Conflict("Esta reaccion ya fue hecha");
 
