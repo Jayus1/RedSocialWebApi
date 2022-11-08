@@ -11,12 +11,9 @@ namespace RedSocial.Controllers
     {
         private readonly IComentariosData comentariosData;
 
-        public ComentariosController(IComentariosData comentariosData)
-        {
-            this.comentariosData = comentariosData;
-        }
+        public ComentariosController(IComentariosData comentariosData) => this.comentariosData = comentariosData;
 
-        [HttpGet("CrearComentarios/{idUsuario}/{idPost}")]
+        [HttpGet("VerComentarios/{idUsuario}/{idPost}")]
         public async Task<IActionResult> GetComentarios(int idUsuario, int idPost)
         {
             
@@ -45,12 +42,12 @@ namespace RedSocial.Controllers
                 return Conflict("El comentario no existe");
 
             var editar = await comentariosData.EditarComentario(comentarios.IdPost, idUsuario, idComentarios, comentarios.Comentario);
-            if (editar)
+            if (!editar)
                 return BadRequest("Hubo problemas al tratar de editar el post");
             return Ok("Se edito el usuario correctamente");
         }
 
-        [HttpDelete("EliminarComentario/{idusuario}/{idPost}/{idComentario}")]
+        [HttpDelete("EliminarComentario/{idUsuario}/{idPost}/{idComentario}")]
         public async Task<IActionResult> DeleteComments(int idPost,int idUsuario, int idComentario)
         {
             var existe = await comentariosData.ExisteComentario(idUsuario, idComentario);

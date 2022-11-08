@@ -49,14 +49,14 @@ namespace RedSocial.Data
         public async Task<bool> ExistenciaUsuario(string username)
         {
             using var con = new SqlConnection(connectionString);
-            var existe = await con.ExecuteAsync(
-                @"SELECT 1 
+            var existe = await con.QueryFirstOrDefaultAsync<Usuarios>(
+                @"SELECT Username, Contraseña 
                   FROM Usuarios 
                   WHERE Username = @username",
-                new { username });
+                new {username});
                 
             
-            if(existe != 1)
+            if(existe is null)
                 return false;
 
             return true;

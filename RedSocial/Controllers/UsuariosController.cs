@@ -40,6 +40,8 @@ namespace RedSocial.Controllers
             if (!crear)
                 return BadRequest("Hubo un conflicto con la creacion de su usuario");
 
+
+            //return Created("Usuario creado correctamente", crear);
             return Ok("Usuario creado correctamente");
 
         }

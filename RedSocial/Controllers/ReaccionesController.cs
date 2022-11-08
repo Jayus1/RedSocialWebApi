@@ -39,13 +39,13 @@ namespace RedSocial.Controllers
         }
 
         [HttpPost("CrearReaccciones")]
-        public async Task<IActionResult> CreateReacciones([FromBody] Posts posts)
+        public async Task<IActionResult> CreateReacciones([FromBody] Reacciones react)
         {
-            var exist = await reaccionesData.ExisteReaccion(posts);
+            var exist = await reaccionesData.ExisteReaccion(react);
             if (exist)
                 return Conflict("Esta reaccion ya fue hecha");
 
-            var create = await reaccionesData.CrearReaccion(posts);
+            var create = await reaccionesData.CrearReaccion(react);
             if (!create)
                 return BadRequest("Hubo un error al intentar crear la reaccion");
 
@@ -53,13 +53,13 @@ namespace RedSocial.Controllers
         }
 
         [HttpPut("EditarReacciones")]
-        public async Task<IActionResult> EditReacciones([FromBody] Posts posts)
+        public async Task<IActionResult> EditReacciones([FromBody] Reacciones react)
         {
-            var exist = await reaccionesData.ExisteReaccion(posts);
+            var exist = await reaccionesData.ExisteReaccion(react);
             if (!exist)
                 return Conflict("Esta reaccion no existe");
 
-            var create = await reaccionesData.EditarReaccion(posts);
+            var create = await reaccionesData.EditarReaccion(react);
             if (!create)
                 return BadRequest("Hubo un error al intentar crear la reaccion");
 

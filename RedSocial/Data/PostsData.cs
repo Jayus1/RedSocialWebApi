@@ -56,7 +56,7 @@ namespace RedSocial.Data
             var editar = await conn.ExecuteAsync(@"UPDATE Posts 
                                                    SET Titulo=@titulo, Contenido=@contenido 
                                                    WHERE Id=@idPost AND IdUsuario=@idUsuario", 
-                                                   new { post.Titulo,post.Contenido, post.Id, idUsuario});
+                                                   new { post.Titulo,post.Contenido, idPost=post.Id, idUsuario});
 
             if (editar != 1)
                 return false;
@@ -78,10 +78,10 @@ namespace RedSocial.Data
         public async Task<bool> ExistePost(int idPost)
         {
             using var con = new SqlConnection(connectionString);
-            var existe = await con.ExecuteAsync(@"SELECT * FROM Posts
+            var existe = await con.QueryFirstAsync<Posts>(@"SELECT * FROM Posts
                                                   WHERE Id = @idPost",
-                                                  idPost);
-            if (existe != 1)
+                                                  new { idPost });
+            if (existe is null)
                 return false;
 
             return true;

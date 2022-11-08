@@ -45,10 +45,12 @@ namespace RedSocial.Data
         public async Task<bool> EditarComentario(int idPost, int idUsuario, int idComentario, string comentarios)
         {
             using var conn = new SqlConnection(connectionstring);
-            var editar = await conn.ExecuteAsync(@"UPDATE INTO Comentarios 
-                                                   VALUEES Comentario= @comentarios
-                                                   WHERE IdPost = @idPost AND IdUsuario= @idUsuario;",
-                                                   new { comentarios, idPost, idUsuario });
+            var editar = await conn.ExecuteAsync(@"UPDATE Comentarios 
+                                                   SET Comentario= @comentarios
+                                                   WHERE IdPost = @idPost 
+                                                   AND IdUsuario= @idUsuario
+                                                   AND Id= @idComentario",
+                                                   new { comentarios, idPost, idUsuario, idComentario});
             if (editar != 1)
                 return false;
 
@@ -72,11 +74,11 @@ namespace RedSocial.Data
         public async Task<bool> ExisteComentario(int idUsuario, int idComentario)
         {
             using var conn = new SqlConnection(connectionstring);
-            var existe = await conn.ExecuteAsync(@"SELECT * FROM Comentarios 
+            var existe = await conn.QueryFirstAsync<Comentarios>(@"SELECT * FROM Comentarios 
                                                    WHERE Id = @idComentario
-                                                   AND IdUsuario = @@idUsuario;",
+                                                   AND IdUsuario = @idUsuario;",
                                                    new { idComentario, idUsuario });
-            if (existe != 1)
+            if (existe is null)
                 return false;
             return true;
         }
