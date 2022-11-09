@@ -39,10 +39,10 @@ namespace RedSocial.Data
         {
             using var cnn = new SqlConnection(connectionstring);
             var edit = await cnn.ExecuteAsync(@"UPDATE Reacciones 
-                                               SET IdTipoReaccion= @idReaccion 
-                                               WHERE IdUsuario= @idUser 
+                                               SET IdTipoReaccion= @idTipoReaccion 
+                                               WHERE IdUsuario= @idUsuario
                                                AND IdPost= @idPost", 
-                                               new {reaccion});
+                                               reaccion);
 
             if (edit != 1)
                 return false;
@@ -53,7 +53,7 @@ namespace RedSocial.Data
         public async Task<bool> DeleteReaccion(int idUser, int idPost, int idReaccion)
         {
             using var cnn = new SqlConnection(connectionstring);
-            var delete = await cnn.ExecuteAsync(@"DELETE Reacciones 
+            var delete = await cnn.ExecuteAsync(@"DELETE FROM Reacciones 
                                                   WHERE IdTipoReaccion= @idReaccion 
                                                   AND IdUsuario= @idUser 
                                                   AND IdPost= @idPost", 
@@ -87,10 +87,9 @@ namespace RedSocial.Data
         {
             using var cnn = new SqlConnection(connectionstring);
             var reacts = await cnn.QueryFirstOrDefaultAsync<Reacciones>(@"SELECT * FROM Reacciones 
-                                                                          WHERE IdUsuario= @idUser 
-                                                                          AND IdReaccion= @idReaccion 
-                                                                          AND IdPost= @idPosr)",
-                                                                          new { reaccion});
+                                                                          WHERE IdUsuario= @idUsuario
+                                                                          AND IdPost= @idPost",
+                                                                          reaccion);
             if (reacts == null)
                 return false;
             return true;
@@ -100,8 +99,8 @@ namespace RedSocial.Data
             using var cnn = new SqlConnection(connectionstring);
             var reacts = await cnn.QueryFirstOrDefaultAsync<Reacciones>(@"SELECT * FROM Reacciones 
                                                                           WHERE IdUsuario= @idUser 
-                                                                          AND IdReaccion= @idReaccion 
-                                                                          AND IdPost= @idPosr)",
+                                                                          AND IdTipoReaccion= @idReaccion 
+                                                                          AND IdPost= @idPost",
                                                                           new { idUser,idReaccion, idPost });
             if (reacts is null)
                 return false;
