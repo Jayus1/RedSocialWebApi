@@ -54,7 +54,7 @@ namespace RedSocial.Data
         {
             using var cnn = new SqlConnection(connectionstring);
             var delete = await cnn.ExecuteAsync(@"DELETE FROM Reacciones 
-                                                  WHERE IdTipoReaccion= @idReaccion 
+                                                  WHERE Id= @idReaccion 
                                                   AND IdUsuario= @idUser 
                                                   AND IdPost= @idPost", 
                                                   new { idReaccion, idUser, idPost });
@@ -99,7 +99,7 @@ namespace RedSocial.Data
             using var cnn = new SqlConnection(connectionstring);
             var reacts = await cnn.QueryFirstOrDefaultAsync<Reacciones>(@"SELECT * FROM Reacciones 
                                                                           WHERE IdUsuario= @idUser 
-                                                                          AND IdTipoReaccion= @idReaccion 
+                                                                          AND Id= @idReaccion 
                                                                           AND IdPost= @idPost",
                                                                           new { idUser,idReaccion, idPost });
             if (reacts is null)
