@@ -70,11 +70,11 @@ namespace RedSocial.Controllers
         public async Task<IActionResult> DeleteReaccion(int idUser, int idPost, int idReaccion)
         {
             var exist = await reaccionesData.ExisteReaccion(idUser, idPost, idReaccion);
-            if (exist)
-                return Conflict("Esta reaccion ya fue hecha");
+            if (!exist)
+                return Conflict("Esta reaccion no existe");
 
             var delete= await reaccionesData.DeleteReaccion(idUser, idPost, idReaccion);
-            if (delete)
+            if (!delete)
                 return BadRequest("Error al eliminar la reaccion");
             return Ok("Se elimino la reaccion correctamente");
         }
