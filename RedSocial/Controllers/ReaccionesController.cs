@@ -49,7 +49,7 @@ namespace RedSocial.Controllers
             if (!create)
                 return BadRequest("Hubo un error al intentar crear la reaccion");
 
-            return Ok("Se  Ha creado el usuario correctamente");
+            return Ok("Se ha creado la reaccion correctamente");
         }
 
         [HttpPut("EditarReacciones")]
@@ -61,9 +61,9 @@ namespace RedSocial.Controllers
 
             var create = await reaccionesData.EditarReaccion(react);
             if (!create)
-                return BadRequest("Hubo un error al intentar crear la reaccion");
+                return BadRequest("Hubo un error al intentar editar la reaccion");
 
-            return Ok("Se  Ha creado el usuario correctamente");
+            return Ok("Se ha editado la reaccion correctamente");
         }
 
         [HttpDelete("{idUser}/{idPost}/{idReaccion}")]
@@ -74,7 +74,7 @@ namespace RedSocial.Controllers
                 return Conflict("Esta reaccion ya fue hecha");
 
             var delete= await reaccionesData.DeleteReaccion(idUser, idPost, idReaccion);
-            if (!delete)
+            if (delete)
                 return BadRequest("Error al eliminar la reaccion");
             return Ok("Se elimino la reaccion correctamente");
         }
