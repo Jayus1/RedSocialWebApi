@@ -16,15 +16,17 @@ builder.Services.AddTransient<IPostsData,PostsData>();
 builder.Services.AddTransient<IComentariosData,ComentariosData>();
 builder.Services.AddTransient<IReaccionesData,ReaccionesData>();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-    options.TokenValidationParameters=new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    options.TokenValidationParameters=new TokenValidationParameters
     {
-        ValidateIssuer=true,
-        ValidateAudience= true,
-        ValidateLifetime=true,
-        ValidIssuer= builder.Configuration["JWT:Issuer"],
-        ValidAudience= builder.Configuration["JWT:Audience"],
-        IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+        ValidateIssuer=false,
+        ValidateAudience= false,
+        //ValidateLifetime=true,
+        //ValidIssuer= builder.Configuration["JWT:Issuer"],
+        //ValidAudience= builder.Configuration["JWT:Audience"],
+        IssuerSigningKey=new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
     }
 
 );
