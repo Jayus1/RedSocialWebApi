@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using RedSocial.Data;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +16,19 @@ builder.Services.AddTransient<IPostsData,PostsData>();
 builder.Services.AddTransient<IComentariosData,ComentariosData>();
 builder.Services.AddTransient<IReaccionesData,ReaccionesData>();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+    options.TokenValidationParameters=new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateIssuer=true,
+        ValidateAudience= true,
+        ValidateLifetime=true,
+        ValidIssuer= builder.Configuration["JWT:Issuer"],
+        ValidAudience= builder.Configuration["JWT:Audience"],
+        IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+    }
+
+);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,6 +39,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

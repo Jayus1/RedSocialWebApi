@@ -43,6 +43,7 @@ namespace RedSocial.Data
                                                WHERE IdUsuario= @idUsuario
                                                AND IdPost= @idPost", 
                                                reaccion);
+           
 
             if (edit != 1)
                 return false;
