@@ -22,6 +22,7 @@ namespace RedSocial.Servicios
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.NameId, usuario.Username)
+               // new Claim("id", usuario.id),
             };
 
             var credenciales = new SigningCredentials(_ssKey, SecurityAlgorithms.HmacSha256);
@@ -29,7 +30,7 @@ namespace RedSocial.Servicios
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = System.DateTime.Now.AddMinutes(5),
+                Expires = DateTime.Now.AddHours(1),
                 SigningCredentials = credenciales,
             };
 
@@ -39,12 +40,11 @@ namespace RedSocial.Servicios
 
             return tokenHandler.WriteToken(token);
 
-
         }
 
         public TokenService(IConfiguration config)
         {
-            _ssKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Token"]));
+            _ssKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Key"]));
         }
 
 

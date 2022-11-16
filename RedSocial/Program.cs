@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using RedSocial.Data;
+using RedSocial.Servicios;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,7 @@ builder.Services.AddTransient<IUsuarioData,UsuarioData>();
 builder.Services.AddTransient<IPostsData,PostsData>();
 builder.Services.AddTransient<IComentariosData,ComentariosData>();
 builder.Services.AddTransient<IReaccionesData,ReaccionesData>();
+builder.Services.AddScoped<ITokenService,TokenService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -22,7 +24,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         ValidateIssuer=false,
         ValidateAudience= false,
-        //ValidateLifetime=true,
+        ValidateLifetime=true,
         //ValidIssuer= builder.Configuration["JWT:Issuer"],
         //ValidAudience= builder.Configuration["JWT:Audience"],
         IssuerSigningKey=new SymmetricSecurityKey(
