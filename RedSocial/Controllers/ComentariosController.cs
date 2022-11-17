@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RedSocial.Data;
 using RedSocial.Modelos;
@@ -6,6 +7,7 @@ using RedSocial.Modelos;
 namespace RedSocial.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class ComentariosController : ControllerBase
     {

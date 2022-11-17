@@ -25,13 +25,14 @@ namespace RedSocial.Servicios
                // new Claim("id", usuario.id),
             };
 
-            var credenciales = new SigningCredentials(_ssKey, SecurityAlgorithms.HmacSha256);
+            var credenciales = new SigningCredentials(_ssKey, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddHours(1),
                 SigningCredentials = credenciales,
+                NotBefore = DateTime.Now,
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
