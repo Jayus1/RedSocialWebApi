@@ -43,6 +43,33 @@ namespace RedSocial.Servicios
 
         }
 
+        //public static dynamic validarToken(ClaimsIdentity identity)
+        //{
+        //    try
+        //    {
+        //        if (identity.Claims.Count() == 0)
+        //            return new
+        //            {
+        //                success= false,
+        //                message= "Verificar si estas enviando un token valido",
+        //                result=""
+        //            };
+
+        //        var id = identity.Claims.FirstOrDefault(x => x.Type == "id").Value;
+        //        Usuarios usuario = usuario
+        //    }
+        //    catch (Exception ex) 
+        //    {
+        //        return new
+        //        {
+        //            success = false,
+        //            message = "Catch: " + ex.Message,
+        //            result = ""
+        //        };
+        //    }
+        //}
+
+
         public TokenService(IConfiguration config)
         {
             _ssKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Key"]));

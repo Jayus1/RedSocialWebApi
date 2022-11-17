@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using RedSocial.Data;
 using RedSocial.Modelos;
+using System.Security.Claims;
 
 namespace RedSocial.Controllers
 {
@@ -21,7 +22,10 @@ namespace RedSocial.Controllers
 
         [HttpGet("Ver/{id}")]
        public async Task<IActionResult> GetPosts(int id)
-        {       
+        {
+
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
             var posts = await postsData.VerPost(id);
 
             if(posts == null)

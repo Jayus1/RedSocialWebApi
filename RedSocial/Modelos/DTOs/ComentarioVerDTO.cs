@@ -1,10 +1,9 @@
-﻿namespace RedSocial.Modelos
+﻿namespace RedSocial.Modelos.DTOs
 {
-    public class Comentarios
+    public class ComentarioVerDTO
     {
         public int Id { get; set; }
         public int IdPost { get; set; }
-        public int IdUsuario { get; set; }
         public string Comentario { get; set; }
     }
 }
