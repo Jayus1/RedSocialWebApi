@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using RedSocial.Data;
 using RedSocial.Modelos;
+using RedSocial.Modelos.DTOs;
 using RedSocial.Servicios;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
@@ -29,7 +30,7 @@ namespace RedSocial.Controllers
         }
 
         [HttpPost("Login",Name = "LoginDeUsuarios")]
-        public async Task<IActionResult> Login([FromBody] Usuarios usuario)
+        public async Task<IActionResult> Login([FromBody] UsuarioCreacionDTO usuario)
         {
             //var jwt = configuration.GetSection("JWT").Get<Jwt>();
 
@@ -52,23 +53,24 @@ namespace RedSocial.Controllers
             //    signingCredentials: singIn  
             //    ) ;
 
-            var cuentaExiste = await usuarioData.LoginUsuario(usuario.Username, usuario.Contraseña);
+            var cuentaExiste = await usuarioData.LoginUsuario(usuario);
             if (!cuentaExiste)
                 return NotFound("Usuario no Encontrado");
 
-            var tokens = token.CreateToken(usuario);
+            //var tokens = token.CreateToken(usuario);
 
             return Ok(new
             {
-                token = tokens,
+               // token = tokens,
                 usuario=usuario
             });
         }
 
         [HttpPost("Creacion", Name = "CrearUsuarios")]
         //[Route("Registro")]
-        public async Task<IActionResult> CreateUser([FromBody] Usuarios usuario)
+        public async Task<IActionResult> CreateUser([FromBody] UsuarioCreacionDTO usuario)
         {
+            
             var cuentaExiste = await usuarioData.ExistenciaUsuario(usuario.Username);
             if (cuentaExiste)          
                 return Conflict("El usuario ya existe");

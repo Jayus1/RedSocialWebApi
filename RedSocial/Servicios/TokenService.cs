@@ -21,8 +21,8 @@ namespace RedSocial.Servicios
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.NameId, usuario.Username)
-               // new Claim("id", usuario.id),
+                new Claim(JwtRegisteredClaimNames.Name, usuario.Username),
+               // new Claim("Id", usuario.Id.ToString)
             };
 
             var credenciales = new SigningCredentials(_ssKey, SecurityAlgorithms.HmacSha512Signature);

@@ -17,6 +17,7 @@ builder.Services.AddTransient<IPostsData,PostsData>();
 builder.Services.AddTransient<IComentariosData,ComentariosData>();
 builder.Services.AddTransient<IReaccionesData,ReaccionesData>();
 builder.Services.AddScoped<ITokenService,TokenService>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
