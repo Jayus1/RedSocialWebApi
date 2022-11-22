@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using RedSocial.Data;
 using RedSocial.Modelos;
+using RedSocial.Modelos.DTOs;
+using RedSocial.Servicios;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,48 +20,57 @@ namespace RedSocial.Controllers
     {
         private readonly IUsuarioData usuarioData;
         private readonly IConfiguration configuration;
+        private readonly ITokenService token;
 
-        public UsuariosController(IUsuarioData usuarioData, IConfiguration configuration)
+        public UsuariosController(IUsuarioData usuarioData, IConfiguration configuration, ITokenService token)
         {
             this.usuarioData = usuarioData;
             this.configuration = configuration;
+            this.token = token;
         }
 
         [HttpPost("Login",Name = "LoginDeUsuarios")]
-        public async Task<IActionResult> Login([FromBody] Usuarios usuario)
+        public async Task<IActionResult> Login([FromBody] UsuarioCreacionDTO usuario)
         {
-            var jwt = configuration.GetSection("JWT").Get<Jwt>();
+            //var jwt = configuration.GetSection("JWT").Get<Jwt>();
 
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub,jwt.Subject),
-                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat,DateTime.UtcNow.ToString()),
-                new Claim("id", "5"),
-            };
+            //var claims = new[]
+            //{
+            //    new Claim(JwtRegisteredClaimNames.Sub,jwt.Subject),
+            //    new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+            //    new Claim(JwtRegisteredClaimNames.Iat,DateTime.UtcNow.ToString()),
+            //    new Claim("id", "5"),
+            //};
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key));
-            var singIn= new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
+            //var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key));
+            //var singIn= new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(
-                jwt.Issuer,
-                jwt.Audience,
-                claims,
-                expires: DateTime.Now.AddMinutes(5),
-                signingCredentials: singIn  
-                ) ;
+            //var token = new JwtSecurityToken(
+            //    jwt.Issuer,
+            //    jwt.Audience,
+            //    claims,
+            //    expires: DateTime.Now.AddMinutes(5),
+            //    signingCredentials: singIn  
+            //    ) ;
 
-            var cuentaExiste = await usuarioData.LoginUsuario(usuario.Username, usuario.Contraseña);
+            var cuentaExiste = await usuarioData.LoginUsuario(usuario);
             if (!cuentaExiste)
                 return NotFound("Usuario no Encontrado");
 
-            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+            //var tokens = token.CreateToken(usuario);
+
+            return Ok(new
+            {
+               // token = tokens,
+                usuario=usuario
+            });
         }
 
         [HttpPost("Creacion", Name = "CrearUsuarios")]
         //[Route("Registro")]
-        public async Task<IActionResult> CreateUser([FromBody] Usuarios usuario)
+        public async Task<IActionResult> CreateUser([FromBody] UsuarioCreacionDTO usuario)
         {
+            
             var cuentaExiste = await usuarioData.ExistenciaUsuario(usuario.Username);
             if (cuentaExiste)          
                 return Conflict("El usuario ya existe");

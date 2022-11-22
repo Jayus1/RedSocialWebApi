@@ -1,8 +1,7 @@
-﻿namespace RedSocial.Modelos
+﻿namespace RedSocial.Modelos.DTOs
 {
-    public class Usuarios
+    public class UsuarioCreacionDTO
     {
-        public int Id { get; set; }
         public string Username { get; set; }
         public string Contraseña { get; set; }
     }

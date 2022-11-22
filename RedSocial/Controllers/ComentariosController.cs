@@ -1,17 +1,26 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RedSocial.Data;
 using RedSocial.Modelos;
+using RedSocial.Modelos.DTOs;
 
 namespace RedSocial.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class ComentariosController : ControllerBase
     {
         private readonly IComentariosData comentariosData;
+        private readonly IMapper mapper;
 
-        public ComentariosController(IComentariosData comentariosData) => this.comentariosData = comentariosData;
+        public ComentariosController(IComentariosData comentariosData, IMapper mapper)
+        {
+            this.comentariosData = comentariosData;
+            this.mapper = mapper;
+        }
 
         [HttpGet("VerComentarios/{idUsuario}/{idPost}")]
         public async Task<IActionResult> GetComentarios(int idUsuario, int idPost)
@@ -21,27 +30,27 @@ namespace RedSocial.Controllers
             if(comments==null)
                 return NotFound("No se encontraron comentarios hechos por usted en esta publicacion");
 
-            return Ok(idPost);
+            return Ok(mapper.Map<ComentarioVerDTO>(comments));
         }
 
         [HttpPost("Comentar/{idUsuario}")]
-        public async Task<IActionResult> PostComments(int idUsuario, [FromBody] Comentarios comentarios)
+        public async Task<IActionResult> PostComments(int idUsuario, [FromBody] ComentarioCreacionDTO comentarios)
         {
 
-            var create = await comentariosData.CrearComentario(idUsuario, comentarios);
+            var create = await comentariosData.CrearComentario(idUsuario, mapper.Map<Comentarios>(comentarios));
             if (create == false)
                 return BadRequest("No se pudo crear el comentario");
             return Ok("El post fue creado exitosamente");
         }
 
         [HttpPut("EditarComentario/{idUsuario}/{idComentarios}")]
-        public async Task<IActionResult> PutComments(int idUsuario ,int idComentarios,[FromBody] Comentarios comentarios)
+        public async Task<IActionResult> PutComments(int idUsuario ,int idComentarios,int idPost,[FromBody] ComentarioEditarDTO comentarios)
         {
             var existe= await comentariosData.ExisteComentario(idUsuario,idComentarios);
             if (!existe)
                 return Conflict("El comentario no existe");
 
-            var editar = await comentariosData.EditarComentario(comentarios.IdPost, idUsuario, idComentarios, comentarios.Comentario);
+            var editar = await comentariosData.EditarComentario(idPost, idUsuario, idComentarios, comentarios.Comentario);
             if (!editar)
                 return BadRequest("Hubo problemas al tratar de editar el post");
             return Ok("Se edito el usuario correctamente");

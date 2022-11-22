@@ -8,7 +8,7 @@ namespace RedSocial.Modelos
         public int Id { get; set; }
         public string Titulo { get; set; }
         public string Contenido { get; set; }
-        public int idUsuario { get; set; }
+        public int IdUsuario { get; set; }
 
     }
 }

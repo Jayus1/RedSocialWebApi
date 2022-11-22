@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using RedSocial.Modelos;
+using RedSocial.Modelos.DTOs;
 using System.Data.Common;
 using System.Data.SqlClient;
 
@@ -7,9 +8,9 @@ namespace RedSocial.Data
 {
     public interface IUsuarioData
     {
-        Task<bool> CreacionDeUsuario(Usuarios usuario);
+        Task<bool> CreacionDeUsuario(UsuarioCreacionDTO usuario);
         Task<bool> ExistenciaUsuario(string username);
-        Task<bool> LoginUsuario(string username, string contraseña);
+        Task<bool> LoginUsuario(UsuarioCreacionDTO usuario);
     }
 
     public class UsuarioData: IUsuarioData
@@ -18,18 +19,18 @@ namespace RedSocial.Data
 
         public UsuarioData(IConfiguration configuration) => connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        public async Task<bool> LoginUsuario(string username, string contraseña)
+        public async Task<bool> LoginUsuario(UsuarioCreacionDTO usuario)
         {
             using var con = new SqlConnection(connectionString);
             var login = await con.QueryFirstOrDefaultAsync<int>(
                 @"SELECT 1 
                   FROM Usuarios 
-                  WHERE Username = @username AND Contraseña = @contraseña;", 
-                new { username, contraseña });
+                  WHERE Username = @Username AND Contraseña = @Contraseña;", 
+                usuario);
             return login == 1;
         }
 
-        public async Task<bool> CreacionDeUsuario(Usuarios usuario)
+        public async Task<bool> CreacionDeUsuario(UsuarioCreacionDTO usuario)
         {
             using var con= new SqlConnection(connectionString);
 
