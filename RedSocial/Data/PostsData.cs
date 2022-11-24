@@ -7,7 +7,7 @@ namespace RedSocial.Data
     public interface IPostsData
     {
         Task<bool> CrearPost(int id, Posts post);
-        Task<bool> EditarPost(int idPost, Posts post);
+        Task<bool> EditarPost(int idUsuario, int idPost, Posts post);
         Task<bool> EliminarPost(int idUsuario, int idPost);
         Task<bool> ExistePost(int idPost);
         Task<IEnumerable<Posts>> VerPost(int id);
@@ -23,7 +23,7 @@ namespace RedSocial.Data
         public async Task<IEnumerable<Posts>> VerPost(int id)
         {
             using var conn = new SqlConnection(connectionString);
-            var posts = await conn.QueryAsync<Posts>(@"SELECT Titulo, Contenido 
+            var posts = await conn.QueryAsync<Posts>(@"SELECT * 
                                                        From Posts 
                                                        WHERE IdUsuario = @Id", 
                                                        new { id });
@@ -33,7 +33,7 @@ namespace RedSocial.Data
         public async Task<Posts> VerPostPorId(int idUsuario, int idPost)
         {
             using var conn = new SqlConnection(connectionString);
-            var posts = await conn.QueryFirstOrDefaultAsync<Posts>(@"SELECT Titulo,Contenido 
+            var posts = await conn.QueryFirstOrDefaultAsync<Posts>(@"SELECT *
                                                                      From Posts 
                                                                      WHERE IdUsuario = @idUsuario and Id= @idPost", 
                                                                      new { idUsuario, idPost });
@@ -50,13 +50,13 @@ namespace RedSocial.Data
             return true;
         }
 
-        public async Task<bool> EditarPost(int idUsuario, Posts post)
+        public async Task<bool> EditarPost(int idUsuario, int idPost, Posts post)
         {
             using var conn = new SqlConnection(connectionString);
             var editar = await conn.ExecuteAsync(@"UPDATE Posts 
-                                                   SET Titulo=@titulo, Contenido=@contenido 
+                                                   SET Titulo= @Titulo, Contenido= @Contenido 
                                                    WHERE Id=@idPost AND IdUsuario=@idUsuario", 
-                                                   new { post.Titulo,post.Contenido, idPost=post.Id, idUsuario});
+                                                   new { post.Titulo,post.Contenido, idPost, idUsuario});
 
             if (editar != 1)
                 return false;

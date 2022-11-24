@@ -11,7 +11,7 @@ using RedSocial.Modelos.DTOs;
 namespace RedSocial.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class ReaccionesController : ControllerBase
     {
@@ -31,7 +31,7 @@ namespace RedSocial.Controllers
             var ver = await reaccionesData.VerReaccion(idPost);
             if(ver == null)
                 return NotFound("No se encontraron reacciones");
-            return Ok(mapper.Map<ReaccionesVerDTO>(ver));
+            return Ok(ver);
         }
 
         [HttpGet("TiposDeReacciones")]
@@ -44,28 +44,28 @@ namespace RedSocial.Controllers
             return Ok(ver);
         }
 
-        [HttpPost("CrearReaccciones")]
-        public async Task<IActionResult> CreateReacciones([FromBody] ReaccionesCreacionDTO react)
+        [HttpPost("CrearReaccciones/{idUser}")]
+        public async Task<IActionResult> CreateReacciones([FromBody] ReaccionesCreacionDTO react, int idUser)
         {
             var exist = await reaccionesData.ExisteReaccion(mapper.Map<Reacciones>(react));
             if (exist)
                 return Conflict("Esta reaccion ya fue hecha");
 
-            var create = await reaccionesData.CrearReaccion(mapper.Map<Reacciones>(react));
+            var create = await reaccionesData.CrearReaccion(idUser,mapper.Map<Reacciones>(react));
             if (!create)
                 return BadRequest("Hubo un error al intentar crear la reaccion");
 
             return Ok("Se ha creado la reaccion correctamente");
         }
 
-        [HttpPut("EditarReacciones")]
-        public async Task<IActionResult> EditReacciones([FromBody] ReaccionesEditarDTO react)
+        [HttpPut("EditarReacciones/{idUsuario}/{idPost}")]
+        public async Task<IActionResult> EditReacciones([FromBody] ReaccionesEditarDTO react, int idUsuario, int idPost)
         {
             var exist = await reaccionesData.ExisteReaccion(mapper.Map<Reacciones>(react));
             if (!exist)
                 return Conflict("Esta reaccion no existe");
 
-            var create = await reaccionesData.EditarReaccion(mapper.Map<Reacciones>(react));
+            var create = await reaccionesData.EditarReaccion(mapper.Map<Reacciones>(react),idUsuario, idPost);
             if (!create)
                 return BadRequest("Hubo un error al intentar editar la reaccion");
 

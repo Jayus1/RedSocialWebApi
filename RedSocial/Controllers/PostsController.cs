@@ -12,7 +12,7 @@ using System.Security.Claims;
 namespace RedSocial.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class PostsController : ControllerBase
     {
@@ -68,13 +68,13 @@ namespace RedSocial.Controllers
         }
 
         [HttpPut("Editar/{idUsuario}")]
-        public async Task<IActionResult> EditPost(int idUsuario,int IdPost, [FromBody] PostsCrearDTO post)
+        public async Task<IActionResult> EditPost(int idUsuario,int idPost, [FromBody] PostsCrearDTO post)
         {
-            var exist = await postsData.ExistePost(IdPost);
+            var exist = await postsData.ExistePost(idPost);
             if (!exist)
                 return NotFound("No se encontro este post");
 
-            var edit = await postsData.EditarPost(idUsuario, mapper.Map<Posts>(post));
+            var edit = await postsData.EditarPost(idUsuario, idPost, mapper.Map<Posts>(post));
             if (!edit)
                 return NotFound("No se pudo editar");
 

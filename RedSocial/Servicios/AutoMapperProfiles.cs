@@ -33,7 +33,7 @@ namespace RedSocial.Servicios
             //Editar
             CreateMap<ReaccionesEditarDTO, Reacciones>();
             //Ver
-            CreateMap<Reacciones, ReaccionesVerDTO>();
+            CreateMap<Reacciones,ReaccionesVerDTO>();
         }
 
     }
