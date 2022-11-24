@@ -180,3 +180,5 @@ C:\Users\Julio Sierra\source\repos\RedSocial\RedSocial\bin\Debug\net6.0\System.T
 C:\Users\Julio Sierra\source\repos\RedSocial\RedSocial\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
 C:\Users\Julio Sierra\source\repos\RedSocial\RedSocial\bin\Debug\net6.0\AutoMapper.dll
 C:\Users\Julio Sierra\source\repos\RedSocial\RedSocial\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\julio\source\repos\Jayus1\RedSocialWebApi\RedSocial\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\julio\source\repos\Jayus1\RedSocialWebApi\RedSocial\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

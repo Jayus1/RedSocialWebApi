@@ -26,7 +26,7 @@ namespace RedSocial.Data
                 @"SELECT 1 
                   FROM Usuarios 
                   WHERE Username = @Username AND Contraseña = @Contraseña;", 
-                new { usuario });
+                usuario);
             return login == 1;
         }
 
