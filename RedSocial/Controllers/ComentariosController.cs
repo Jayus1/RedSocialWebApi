@@ -9,7 +9,7 @@ using RedSocial.Modelos.DTOs;
 namespace RedSocial.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class ComentariosController : ControllerBase
     {
@@ -40,7 +40,7 @@ namespace RedSocial.Controllers
             var create = await comentariosData.CrearComentario(idUsuario, mapper.Map<Comentarios>(comentarios));
             if (create == false)
                 return BadRequest("No se pudo crear el comentario");
-            return Ok("El post fue creado exitosamente");
+            return Ok("El comentario fue creado exitosamente");
         }
 
         [HttpPut("EditarComentario/{idUsuario}/{idComentarios}")]

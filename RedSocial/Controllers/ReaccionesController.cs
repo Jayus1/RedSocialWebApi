@@ -11,7 +11,7 @@ using RedSocial.Modelos.DTOs;
 namespace RedSocial.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class ReaccionesController : ControllerBase
     {
@@ -31,7 +31,8 @@ namespace RedSocial.Controllers
             var ver = await reaccionesData.VerReaccion(idPost);
             if(ver == null)
                 return NotFound("No se encontraron reacciones");
-            return Ok(mapper.Map<ReaccionesVerDTO>(ver));
+            var visto = mapper.Map<ReaccionesVerDTO>(ver);
+            return Ok(visto);
         }
 
         [HttpGet("TiposDeReacciones")]

@@ -23,7 +23,7 @@ namespace RedSocial.Data
         public async Task<Comentarios> VerCommentario(int idPost, int idUsuario)
         {
             using var conn = new SqlConnection(connectionstring);
-            var comentario = await conn.QueryFirstOrDefaultAsync<Comentarios>(@"SELECT Comentario
+            var comentario = await conn.QueryFirstOrDefaultAsync<Comentarios>(@"SELECT *
                                                                                 FROM Comentarios
                                                                                 WHERE IdPost= @idPost
                                                                                 AND IdUsuario= @idUsuario",
