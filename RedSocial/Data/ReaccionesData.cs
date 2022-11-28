@@ -11,7 +11,7 @@ namespace RedSocial.Data
         Task<bool> DeleteReaccion(int idUser, int idPost, int idReaccion);
         Task<bool> EditarReaccion(Reacciones reaccion, int idUsuario, int idPost);
         Task<bool> ExisteReaccion(Reacciones reaccion);
-        Task<bool> ExisteReaccion(int idUser, int idPost, int idReaccion);
+        Task<bool> ExisteReaccion(int idUser, int idPost);
         Task<IEnumerable<ReaccionesVerDTO>> VerReaccion(int idPost);
         Task<IEnumerable<TiposDeReacciones>> VerTiposReaccion();
     }
@@ -88,7 +88,7 @@ namespace RedSocial.Data
         public async Task<bool> ExisteReaccion(Reacciones reaccion)
         {
             using var cnn = new SqlConnection(connectionstring);
-            var reacts = await cnn.QueryFirstOrDefaultAsync<Reacciones>(@"SELECT * FROM Reacciones 
+            var reacts = await cnn.QueryFirstOrDefaultAsync<Reacciones>(@"SELECT *  FROM Reacciones 
                                                                           WHERE IdUsuario= @idUsuario
                                                                           AND IdPost= @idPost",
                                                                           reaccion);
@@ -96,14 +96,13 @@ namespace RedSocial.Data
                 return false;
             return true;
         }
-        public async Task<bool> ExisteReaccion(int idUser, int idPost, int idReaccion)
+        public async Task<bool> ExisteReaccion(int idUser, int idPost)
         {
             using var cnn = new SqlConnection(connectionstring);
             var reacts = await cnn.QueryFirstOrDefaultAsync<Reacciones>(@"SELECT * FROM Reacciones 
                                                                           WHERE IdUsuario= @idUser 
-                                                                          AND Id= @idReaccion 
                                                                           AND IdPost= @idPost",
-                                                                          new { idUser,idReaccion, idPost });
+                                                                          new { idUser,idPost});
             if (reacts is null)
                 return false;
             return true;
