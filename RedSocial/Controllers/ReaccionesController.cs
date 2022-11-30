@@ -11,7 +11,7 @@ using RedSocial.Modelos.DTOs;
 namespace RedSocial.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class ReaccionesController : ControllerBase
     {
@@ -72,18 +72,17 @@ namespace RedSocial.Controllers
             return Ok("Se ha editado la reaccion correctamente");
         }
 
-        [HttpDelete("{idUser}/{idPost}/{idReaccion}")]
-        public async Task<IActionResult> DeleteReaccion(int idUser, int idPost, int idReaccion)
+        [HttpDelete("{idUser}/{idPost}")]
+        public async Task<IActionResult> DeleteReaccion(int idUser, int idPost)
         {
             var exist = await reaccionesData.ExisteReaccion(idUser, idPost);
             if (!exist)
                 return Conflict("Esta reaccion no existe");
 
-            var delete= await reaccionesData.DeleteReaccion(idUser, idPost, idReaccion);
+            var delete= await reaccionesData.DeleteReaccion(idUser, idPost);
             if (!delete)
                 return BadRequest("Error al eliminar la reaccion");
             return Ok("Se elimino la reaccion correctamente");
         }
-
     }
 }

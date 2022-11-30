@@ -53,16 +53,18 @@ namespace RedSocial.Controllers
             //    signingCredentials: singIn  
             //    ) ;
 
+            //var tokens = token.CreateToken(usuario);
+
             var cuentaExiste = await usuarioData.LoginUsuario(usuario);
-            if (!cuentaExiste)
+            if (cuentaExiste is null)
                 return NotFound("Usuario no Encontrado");
 
-            //var tokens = token.CreateToken(usuario);
+            var tokenf=token.CreateToken(cuentaExiste); 
 
             return Ok(new
             {
-               // token = tokens,
-                usuario=usuario
+                token = tokenf,
+                Mensaje="Se ha logeado correctamente"
             });
         }
 

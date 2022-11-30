@@ -9,7 +9,7 @@ using RedSocial.Modelos.DTOs;
 namespace RedSocial.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class ComentariosController : ControllerBase
     {

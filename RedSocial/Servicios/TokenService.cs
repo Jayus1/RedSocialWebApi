@@ -12,6 +12,7 @@ namespace RedSocial.Servicios
     public interface ITokenService
     {
         string CreateToken(Usuarios usuario);
+        int ObtencionIdUsuario(ClaimsIdentity identity);
     }
 
     public class TokenService : ITokenService
@@ -22,7 +23,8 @@ namespace RedSocial.Servicios
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Name, usuario.Username),
-               // new Claim("Id", usuario.Id.ToString)
+                new Claim("Id",Convert.ToString(usuario.Id))
+                
             };
 
             var credenciales = new SigningCredentials(_ssKey, SecurityAlgorithms.HmacSha512Signature);
@@ -43,31 +45,22 @@ namespace RedSocial.Servicios
 
         }
 
-        //public static dynamic validarToken(ClaimsIdentity identity)
-        //{
-        //    try
-        //    {
-        //        if (identity.Claims.Count() == 0)
-        //            return new
-        //            {
-        //                success= false,
-        //                message= "Verificar si estas enviando un token valido",
-        //                result=""
-        //            };
-
-        //        var id = identity.Claims.FirstOrDefault(x => x.Type == "id").Value;
-        //        Usuarios usuario = usuario
-        //    }
-        //    catch (Exception ex) 
-        //    {
-        //        return new
-        //        {
-        //            success = false,
-        //            message = "Catch: " + ex.Message,
-        //            result = ""
-        //        };
-        //    }
-        //}
+        public int ObtencionIdUsuario (ClaimsIdentity identity)
+        {
+            try
+            {
+                if (identity.Claims.Count() == 0)
+                {
+                    return 0;
+                 }
+                var id = Convert.ToInt32(identity.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                return id;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
 
 
         public TokenService(IConfiguration config)
