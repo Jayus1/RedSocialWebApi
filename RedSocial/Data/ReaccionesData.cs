@@ -1,17 +1,18 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using RedSocial.Modelos;
+using RedSocial.Modelos.DTOs;
 
 namespace RedSocial.Data
 {
     public interface IReaccionesData
     {
-        Task<bool> CrearReaccion(Reacciones reaccion);
+        Task<bool> CrearReaccion(int idUsuario,Reacciones reaccion);
         Task<bool> DeleteReaccion(int idUser, int idPost, int idReaccion);
-        Task<bool> EditarReaccion(Reacciones reaccion);
+        Task<bool> EditarReaccion(Reacciones reaccion, int idUsuario, int idPost);
         Task<bool> ExisteReaccion(Reacciones reaccion);
         Task<bool> ExisteReaccion(int idUser, int idPost, int idReaccion);
-        Task<IEnumerable<Reacciones>> VerReaccion(int idPost);
+        Task<IEnumerable<ReaccionesVerDTO>> VerReaccion(int idPost);
         Task<IEnumerable<TiposDeReacciones>> VerTiposReaccion();
     }
 
@@ -21,12 +22,12 @@ namespace RedSocial.Data
 
         public ReaccionesData(IConfiguration configuration) => connectionstring = configuration.GetConnectionString("DefaultConnection");
 
-        public async Task<bool> CrearReaccion(Reacciones reaccion)
+        public async Task<bool> CrearReaccion(int idUsuario, Reacciones reaccion)
         {
             using var cnn = new SqlConnection(connectionstring);
             var crear = await cnn.ExecuteAsync(@"Insert INTO Reacciones 
                                                  Values (@IdPost,@IdUsuario,@IdTipoReaccion)", 
-                                                 reaccion);
+                                                 new {reaccion.IdPost, idUsuario, reaccion.IdTipoReaccion});
 
             if (crear != 1)
                 return false;
@@ -35,14 +36,14 @@ namespace RedSocial.Data
         }
 
 
-        public async Task<bool> EditarReaccion(Reacciones reaccion)
+        public async Task<bool> EditarReaccion(Reacciones reaccion, int idUsuario, int idPost)
         {
             using var cnn = new SqlConnection(connectionstring);
             var edit = await cnn.ExecuteAsync(@"UPDATE Reacciones 
                                                SET IdTipoReaccion= @idTipoReaccion 
                                                WHERE IdUsuario= @idUsuario
                                                AND IdPost= @idPost", 
-                                               reaccion);
+                                               new {reaccion.IdTipoReaccion, idUsuario, idPost});
            
 
             if (edit != 1)
@@ -66,10 +67,10 @@ namespace RedSocial.Data
             return true;
         }
 
-        public async Task<IEnumerable<Reacciones>> VerReaccion(int idPost)
+        public async Task<IEnumerable<ReaccionesVerDTO>> VerReaccion(int idPost)
         {
             using var cnn = new SqlConnection(connectionstring);
-            var reacts = await cnn.QueryAsync<Reacciones>(@"SELECT * FROM Reacciones 
+            var reacts = await cnn.QueryAsync<ReaccionesVerDTO>(@"SELECT * FROM Reacciones 
                                                            WHERE IdPost= @idPost", 
                                                            new { idPost });
 
