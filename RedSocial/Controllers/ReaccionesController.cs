@@ -47,7 +47,7 @@ namespace RedSocial.Controllers
         [HttpPost("CrearReaccciones/{idUser}")]
         public async Task<IActionResult> CreateReacciones([FromBody] ReaccionesCreacionDTO react, int idUser)
         {
-            var exist = await reaccionesData.ExisteReaccion(mapper.Map<Reacciones>(react));
+            var exist = await reaccionesData.ExisteReaccion(idUser, react.IdPost);
             if (exist)
                 return Conflict("Esta reaccion ya fue hecha");
 
@@ -61,7 +61,7 @@ namespace RedSocial.Controllers
         [HttpPut("EditarReacciones/{idUsuario}/{idPost}")]
         public async Task<IActionResult> EditReacciones([FromBody] ReaccionesEditarDTO react, int idUsuario, int idPost)
         {
-            var exist = await reaccionesData.ExisteReaccion(mapper.Map<Reacciones>(react));
+            var exist = await reaccionesData.ExisteReaccion(idUsuario, idPost);
             if (!exist)
                 return Conflict("Esta reaccion no existe");
 
@@ -72,18 +72,17 @@ namespace RedSocial.Controllers
             return Ok("Se ha editado la reaccion correctamente");
         }
 
-        [HttpDelete("{idUser}/{idPost}/{idReaccion}")]
-        public async Task<IActionResult> DeleteReaccion(int idUser, int idPost, int idReaccion)
+        [HttpDelete("{idUser}/{idPost}")]
+        public async Task<IActionResult> DeleteReaccion(int idUser, int idPost)
         {
-            var exist = await reaccionesData.ExisteReaccion(idUser, idPost, idReaccion);
+            var exist = await reaccionesData.ExisteReaccion(idUser, idPost);
             if (!exist)
                 return Conflict("Esta reaccion no existe");
 
-            var delete= await reaccionesData.DeleteReaccion(idUser, idPost, idReaccion);
+            var delete= await reaccionesData.DeleteReaccion(idUser, idPost);
             if (!delete)
                 return BadRequest("Error al eliminar la reaccion");
             return Ok("Se elimino la reaccion correctamente");
         }
-
     }
 }

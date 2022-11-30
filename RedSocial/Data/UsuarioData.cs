@@ -10,7 +10,7 @@ namespace RedSocial.Data
     {
         Task<bool> CreacionDeUsuario(UsuarioCreacionDTO usuario);
         Task<bool> ExistenciaUsuario(string username);
-        Task<bool> LoginUsuario(UsuarioCreacionDTO usuario);
+        Task<Usuarios> LoginUsuario(UsuarioCreacionDTO usuario);
     }
 
     public class UsuarioData: IUsuarioData
@@ -19,15 +19,15 @@ namespace RedSocial.Data
 
         public UsuarioData(IConfiguration configuration) => connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        public async Task<bool> LoginUsuario(UsuarioCreacionDTO usuario)
+        public async Task<Usuarios> LoginUsuario(UsuarioCreacionDTO usuario)
         {
             using var con = new SqlConnection(connectionString);
-            var login = await con.QueryFirstOrDefaultAsync<int>(
-                @"SELECT 1 
+            var login = await con.QueryFirstOrDefaultAsync<Usuarios>(
+                @"SELECT *
                   FROM Usuarios 
                   WHERE Username = @Username AND Contraseña = @Contraseña;", 
                 usuario);
-            return login == 1;
+            return login;
         }
 
         public async Task<bool> CreacionDeUsuario(UsuarioCreacionDTO usuario)

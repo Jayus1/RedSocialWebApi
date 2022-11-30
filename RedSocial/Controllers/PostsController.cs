@@ -7,29 +7,34 @@ using Microsoft.Extensions.Hosting;
 using RedSocial.Data;
 using RedSocial.Modelos;
 using RedSocial.Modelos.DTOs;
+using RedSocial.Servicios;
 using System.Security.Claims;
 
 namespace RedSocial.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class PostsController : ControllerBase
     {
         private readonly IPostsData postsData;
         private readonly IMapper mapper;
+        private readonly ITokenService tokenService;
 
-        public PostsController(IPostsData postsData, IMapper mapper)
+        public PostsController(IPostsData postsData, IMapper mapper, ITokenService tokenService)
         {
             this.postsData = postsData;
             this.mapper = mapper;
+            this.tokenService = tokenService;
         }
 
         [HttpGet("Ver/{id}")]
         public async Task<IActionResult> GetPosts(int id)
         {
 
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var rToken=tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
+            if (rToken == 0)
+                return BadRequest("El token no es valido");
 
             var posts = await postsData.VerPost(id);
 
@@ -39,9 +44,12 @@ namespace RedSocial.Controllers
             return Ok(posts);
         }
 
-        [HttpGet("Ver/{idUsuario}/{idPost}")]
-        public async Task<IActionResult> GetPost(int idUsuario, int idPost)
+        [HttpGet("Ver/{idPost}")]
+        public async Task<IActionResult> GetPost(int idPost)
         {
+            var idUsuario = tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
+            if (idUsuario == 0)
+                return BadRequest("El token no es valido");
 
             var exist = await postsData.ExistePost(idPost);
             if (!exist)
