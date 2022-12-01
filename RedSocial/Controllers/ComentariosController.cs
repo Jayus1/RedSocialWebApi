@@ -5,27 +5,34 @@ using Microsoft.AspNetCore.Mvc;
 using RedSocial.Data;
 using RedSocial.Modelos;
 using RedSocial.Modelos.DTOs;
+using RedSocial.Servicios;
+using System.Security.Claims;
 
 namespace RedSocial.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class ComentariosController : ControllerBase
     {
         private readonly IComentariosData comentariosData;
         private readonly IMapper mapper;
+        private readonly ITokenService tokenService;
 
-        public ComentariosController(IComentariosData comentariosData, IMapper mapper)
+        public ComentariosController(IComentariosData comentariosData, IMapper mapper, ITokenService tokenService)
         {
             this.comentariosData = comentariosData;
             this.mapper = mapper;
+            this.tokenService = tokenService;
         }
 
-        [HttpGet("VerComentarios/{idUsuario}/{idPost}")]
-        public async Task<IActionResult> GetComentarios(int idUsuario, int idPost)
+        [HttpGet("VerComentarios/{idPost}")]
+        public async Task<IActionResult> GetComentarios(int idPost)
         {
-            
+            var idUsuario = tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
+            if (idUsuario == 0)
+                return BadRequest("El token no es valido");
+
             var comments = await comentariosData.VerCommentario(idPost, idUsuario);
             if(comments==null)
                 return NotFound("No se encontraron comentarios hechos por usted en esta publicacion");
@@ -33,9 +40,12 @@ namespace RedSocial.Controllers
             return Ok(mapper.Map<ComentarioVerDTO>(comments));
         }
 
-        [HttpPost("Comentar/{idUsuario}")]
-        public async Task<IActionResult> PostComments(int idUsuario, [FromBody] ComentarioCreacionDTO comentarios)
+        [HttpPost("Comentar")]
+        public async Task<IActionResult> PostComments([FromBody] ComentarioCreacionDTO comentarios)
         {
+            var idUsuario = tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
+            if (idUsuario == 0)
+                return BadRequest("El token no es valido");
 
             var create = await comentariosData.CrearComentario(idUsuario, mapper.Map<Comentarios>(comentarios));
             if (create == false)
@@ -43,9 +53,13 @@ namespace RedSocial.Controllers
             return Ok("El comentario fue creado exitosamente");
         }
 
-        [HttpPut("EditarComentario/{idUsuario}/{idComentarios}")]
-        public async Task<IActionResult> PutComments(int idUsuario ,int idComentarios,int idPost,[FromBody] ComentarioEditarDTO comentarios)
+        [HttpPut("EditarComentario/{idComentarios}")]
+        public async Task<IActionResult> PutComments(int idComentarios,int idPost,[FromBody] ComentarioEditarDTO comentarios)
         {
+            var idUsuario = tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
+            if (idUsuario == 0)
+                return BadRequest("El token no es valido");
+
             var existe= await comentariosData.ExisteComentario(idUsuario,idComentarios);
             if (!existe)
                 return Conflict("El comentario no existe");
@@ -56,9 +70,13 @@ namespace RedSocial.Controllers
             return Ok("Se edito el usuario correctamente");
         }
 
-        [HttpDelete("EliminarComentario/{idUsuario}/{idPost}/{idComentario}")]
-        public async Task<IActionResult> DeleteComments(int idPost,int idUsuario, int idComentario)
+        [HttpDelete("EliminarComentario/{idPost}/{idComentario}")]
+        public async Task<IActionResult> DeleteComments(int idPost, int idComentario)
         {
+            var idUsuario = tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
+            if (idUsuario == 0)
+                return BadRequest("El token no es valido");
+
             var existe = await comentariosData.ExisteComentario(idUsuario, idComentario);
             if (!existe)
                 return NotFound("El comentario no existe");

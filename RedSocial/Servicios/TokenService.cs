@@ -53,7 +53,7 @@ namespace RedSocial.Servicios
                 {
                     return 0;
                  }
-                var id = Convert.ToInt32(identity.Claims.FirstOrDefault(x => x.Type == "id").Value);
+                var id = Convert.ToInt32(identity.Claims.FirstOrDefault(x => x.Type == "Id").Value);
                 return id;
             }
             catch (Exception)
