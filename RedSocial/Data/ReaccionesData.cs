@@ -12,7 +12,7 @@ namespace RedSocial.Data
         Task<bool> EditarReaccion(Reacciones reaccion, int idUsuario, int idPost);
         Task<bool> ExisteReaccion(Reacciones reaccion);
         Task<bool> ExisteReaccion(int idUser, int idPost);
-        Task<ReaccionesVerDTO> VerReaccion(int idPost);
+        Task<IEnumerable<ReaccionesVerDTO>> VerReaccion(int idPost);
         Task<IEnumerable<TiposDeReacciones>> VerTiposReaccion();
     }
 
@@ -66,10 +66,10 @@ namespace RedSocial.Data
             return true;
         }
 
-        public async Task<ReaccionesVerDTO> VerReaccion(int idPost)
+        public async Task<IEnumerable<ReaccionesVerDTO>> VerReaccion(int idPost)
         {
             using var cnn = new SqlConnection(connectionstring);
-            var reacts = await cnn.QueryFirstOrDefaultAsync<ReaccionesVerDTO>(@"SELECT * FROM Reacciones 
+            var reacts = await cnn.QueryAsync<ReaccionesVerDTO>(@"SELECT * FROM Reacciones 
                                                                   WHERE IdPost= @idPost", 
                                                                   new { idPost });
 

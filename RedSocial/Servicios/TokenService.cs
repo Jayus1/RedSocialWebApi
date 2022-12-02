@@ -32,7 +32,7 @@ namespace RedSocial.Servicios
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddHours(1),
+                Expires = DateTime.Now.AddMinutes(5),
                 SigningCredentials = credenciales,
                 NotBefore = DateTime.Now,
             };

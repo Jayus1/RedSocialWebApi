@@ -28,15 +28,15 @@ namespace RedSocial.Controllers
             this.tokenService = tokenService;
         }
 
-        [HttpGet("Ver/{id}")]
-        public async Task<IActionResult> GetPosts(int id)
+        [HttpGet("Ver")]
+        public async Task<IActionResult> GetPosts()
         {
 
-            var rToken=tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
-            if (rToken == 0)
+            var idUsuario = tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
+            if (idUsuario == 0)
                 return BadRequest("El token no es valido");
 
-            var posts = await postsData.VerPost(id);
+            var posts = await postsData.VerPost(idUsuario);
 
             if (posts == null)
                 return NotFound("No se encontro nada");
@@ -44,7 +44,7 @@ namespace RedSocial.Controllers
             return Ok(posts);
         }
 
-        [HttpGet("VerTodos/{idPost}")]
+        [HttpGet("Ver/{idPost}")]
         public async Task<IActionResult> GetPost(int idPost)
         {
             var idUsuario = tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
@@ -62,11 +62,14 @@ namespace RedSocial.Controllers
 
             return Ok(posts);
         }
-        [HttpPost("Crear/{id}")]
-        public async Task<IActionResult> CreatePost(int id, [FromBody] PostsCrearDTO posts)
+        [HttpPost("Crear")]
+        public async Task<IActionResult> CreatePost([FromBody] PostsCrearDTO posts)
         {
+            var idUsuario = tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
+            if (idUsuario == 0)
+                return BadRequest("El token no es valido");
 
-            var create = await postsData.CrearPost(id, mapper.Map<Posts>(posts));
+            var create = await postsData.CrearPost(idUsuario, mapper.Map<Posts>(posts));
 
             if (!create)
                 return BadRequest("No se pudo crear el usuario");
@@ -75,9 +78,13 @@ namespace RedSocial.Controllers
             return Ok("Post creado exitosamente");
         }
 
-        [HttpPut("Editar/{idUsuario}")]
-        public async Task<IActionResult> EditPost(int idUsuario,int idPost, [FromBody] PostsCrearDTO post)
+        [HttpPut("Editar/{idPost}")]
+        public async Task<IActionResult> EditPost(int idPost, [FromBody] PostsCrearDTO post)
         {
+            var idUsuario = tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
+            if (idUsuario == 0)
+                return BadRequest("El token no es valido");
+
             var exist = await postsData.ExistePost(idPost);
             if (!exist)
                 return NotFound("No se encontro este post");
@@ -89,9 +96,13 @@ namespace RedSocial.Controllers
             return Ok("Se edito el post correctamente");
         }
 
-        [HttpDelete("Eliminar/{idUsuario}/{idPost}")]
-        public async Task<IActionResult> DeletePost(int idUsuario, int idPost)
+        [HttpDelete("Eliminar/{idPost}")]
+        public async Task<IActionResult> DeletePost( int idPost)
         {
+            var idUsuario = tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
+            if (idUsuario == 0)
+                return BadRequest("El token no es valido");
+
             var exist = await postsData.ExistePost(idPost);
             if (!exist)
                 return NotFound("No se encontro este post");
