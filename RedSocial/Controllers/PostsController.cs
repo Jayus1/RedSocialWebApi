@@ -28,7 +28,7 @@ namespace RedSocial.Controllers
             this.tokenService = tokenService;
         }
 
-        [HttpGet("Ver")]
+        [HttpGet("MisPost")]
         public async Task<IActionResult> GetPosts()
         {
 
@@ -44,7 +44,23 @@ namespace RedSocial.Controllers
             return Ok(posts);
         }
 
-        [HttpGet("Ver/{idPost}")]
+        [HttpGet("Posts")]
+        public async Task<IActionResult> PostsPublic()
+        {
+
+            var idUsuario = tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
+            if (idUsuario == 0)
+                return BadRequest("El token no es valido");
+
+            var posts = await postsData.VerPostPublicos(idUsuario);
+
+            if (posts == null)
+                return NotFound("No se encontro nada");
+
+            return Ok(posts);
+        }
+
+        [HttpGet("MiPost/{idPost}")]
         public async Task<IActionResult> GetPost(int idPost)
         {
             var idUsuario = tokenService.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);

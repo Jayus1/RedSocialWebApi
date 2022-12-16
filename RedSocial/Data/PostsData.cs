@@ -12,6 +12,7 @@ namespace RedSocial.Data
         Task<bool> ExistePost(int idPost);
         Task<IEnumerable<Posts>> VerPost(int id);
         Task<Posts> VerPostPorId(int idUsuario, int idPost);
+        Task<IEnumerable<Posts>> VerPostPublicos(int id);
     }
 
     public class PostsData : IPostsData
@@ -26,6 +27,16 @@ namespace RedSocial.Data
             var posts = await conn.QueryAsync<Posts>(@"SELECT * 
                                                        From Posts 
                                                        WHERE IdUsuario = @Id", 
+                                                       new { id });
+            return posts;
+        }
+
+        public async Task<IEnumerable<Posts>> VerPostPublicos(int id)
+        {
+            using var conn = new SqlConnection(connectionString);
+            var posts = await conn.QueryAsync<Posts>(@"SELECT * 
+                                                       From Posts 
+                                                       WHERE IdUsuario != @Id",
                                                        new { id });
             return posts;
         }

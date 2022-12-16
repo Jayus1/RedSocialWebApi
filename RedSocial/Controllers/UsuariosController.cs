@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -16,6 +17,7 @@ namespace RedSocial.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class UsuariosController : ControllerBase
     {
         private readonly IUsuarioData usuarioData;
@@ -60,6 +62,51 @@ namespace RedSocial.Controllers
                 return BadRequest("Hubo un conflicto con la creacion de su usuario");
 
             return Ok("Usuario creado correctamente");
+
+        }
+
+        [Authorize]
+        [HttpDelete("EliminarCuenta", Name = "EliminarUsuarios")]
+        public async Task<IActionResult> DeleteUser()
+        {
+
+            var id = token.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
+            if (id == 0)
+                return BadRequest("El token no es valido");
+
+            var cuentaExiste = await usuarioData.ExistenciaUsuario(id);
+            if (!cuentaExiste)
+                return Conflict("El usuario no existe");
+
+
+            var eliminar = await usuarioData.EliminarUsuario(id);
+
+            if (!eliminar)
+                return BadRequest("Hubo un conflicto con la eliminacion de su usuario");
+
+            return Ok("Usuario eliminado correctamente");
+
+        }
+
+        [Authorize]
+        [HttpPut("EditarCuenta", Name = "EditarUsuarios")]
+        public async Task<IActionResult> EditarUser([FromBody] UsuarioCreacionDTO usuario)
+        {
+            var id = token.ObtencionIdUsuario(HttpContext.User.Identity as ClaimsIdentity);
+            if (id == 0)
+                return BadRequest("El token no es valido");
+
+            var cuentaExiste = await usuarioData.ExistenciaUsuario(id);
+            if (!cuentaExiste)
+                return Conflict("El usuario no existe");
+
+
+            var editar = await usuarioData.EditarUsuario(id,usuario);
+
+            if (!editar)
+                return BadRequest("Hubo un conflicto con la edicion de su usuario");
+
+            return Ok("Usuario editado correctamente");
 
         }
 
