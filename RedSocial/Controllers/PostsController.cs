@@ -44,7 +44,7 @@ namespace RedSocial.Controllers
             return Ok(posts);
         }
 
-        [HttpGet("Posts")]
+        [HttpGet]
         public async Task<IActionResult> PostsPublic()
         {
 

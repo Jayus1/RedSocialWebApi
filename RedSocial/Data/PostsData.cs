@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using RedSocial.Modelos;
+using RedSocial.Modelos.DTOs;
 
 namespace RedSocial.Data
 {
@@ -12,7 +13,7 @@ namespace RedSocial.Data
         Task<bool> ExistePost(int idPost);
         Task<IEnumerable<Posts>> VerPost(int id);
         Task<Posts> VerPostPorId(int idUsuario, int idPost);
-        Task<IEnumerable<Posts>> VerPostPublicos(int id);
+        Task<IEnumerable<PostsVerDTO>> VerPostPublicos(int id);
     }
 
     public class PostsData : IPostsData
@@ -31,11 +32,11 @@ namespace RedSocial.Data
             return posts;
         }
 
-        public async Task<IEnumerable<Posts>> VerPostPublicos(int id)
+        public async Task<IEnumerable<PostsVerDTO>> VerPostPublicos(int id)
         {
             using var conn = new SqlConnection(connectionString);
-            var posts = await conn.QueryAsync<Posts>(@"SELECT * 
-                                                       From Posts 
+            var posts = await conn.QueryAsync<PostsVerDTO>(@"SELECT * 
+                                                       FROM Posts 
                                                        WHERE IdUsuario != @Id",
                                                        new { id });
             return posts;
